@@ -1,8 +1,6 @@
 from multiprocessing import Process, Queue
 from PySide2 import QtCore
 
-from keylogger import start_keylogger
-
 
 class Runner(QtCore.QObject):
     """
@@ -40,9 +38,3 @@ class BackgroundRunner:
         self.runner.job_input = input
         self.runner.job_functions = funcs
         self.runner_thread.start()
-
-
-runner = BackgroundRunner()
-runner.start_jobs([start_keylogger])
-while True:
-    pass
