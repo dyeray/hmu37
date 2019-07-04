@@ -1,2 +1,3 @@
 PySide2==5.13.0
 pynput==1.4.2
+stackapi==0.1.12
