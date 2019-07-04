@@ -1,16 +1,5 @@
+import json
 from stackapi import StackAPI
-
-
-class Answer:
-    def __init__(self, content, question_url):
-        self.content = content
-        self.question_url = question_url
-
-    def __str__(self):
-        return self.content
-
-    def __repr__(self):
-        return f'<Answer {self}>'
 
 
 class StackOverflowApi:
@@ -45,10 +34,13 @@ class StackOverflowApi:
             return [answer for answer in fetch_answers(question_ids) if is_valid_answer(answer)]
 
         def create_answer(answer):
-            return Answer(answer['body'], question_urls[answer['question_id']])
+            return {
+                'content': answer['body'],
+                'question_url': question_urls[answer['question_id']],
+            }
 
         def get_answer_bodies(answer_ids):
             return self.SITE.fetch('answers', ids=answer_ids, filter='withBody')['items']
 
         answers_ids = [answer['answer_id'] for answer in get_answers_metadata()]
-        return [create_answer(answer) for answer in get_answer_bodies(answers_ids)]
+        return json.dumps([create_answer(answer) for answer in get_answer_bodies(answers_ids)])
