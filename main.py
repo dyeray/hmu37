@@ -3,12 +3,14 @@ import sys
 from PySide2 import QtWidgets
 from PySide2.QtCore import Slot
 from keylogger import KeyloggerRunner
-from PySide2.QtCore import Signal
+from PySide2.QtCore import Signal, QPoint, QCoreApplication
 
 
 class MyWidget(QtWidgets.QWidget):
 
     msg_signal = Signal(str)
+    hidden = False
+    last_position = QPoint(0, 0)
 
     def __init__(self):
         QtWidgets.QWidget.__init__(self)
@@ -25,7 +27,24 @@ class MyWidget(QtWidgets.QWidget):
 
     @Slot(str)
     def get_events(self, event):
-        self.text.setText(event)
+        callback = getattr(self, f'event_{event}_callback', self.unknown_event_callback)
+        callback(event=event)
+
+    def event_invoke_callback(self, **kwargs):
+        if self.hidden:
+            self.show()
+            self.move(self.last_position.x(), self.last_position.y())
+            self.hidden = False
+        else:
+            self.last_position = self.pos()
+            self.hide()
+            self.hidden = True
+
+    def event_quit_callback(self, **kwargs):
+        QCoreApplication.quit()
+
+    def unknown_event_callback(self, event):
+        print(f'Unknown event {event}')
 
     def magic(self):
         print("hehe")
