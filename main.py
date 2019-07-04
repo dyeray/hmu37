@@ -4,6 +4,8 @@ from PySide2 import QtWidgets
 from PySide2.QtCore import Slot
 from keylogger import KeyloggerRunner
 from PySide2.QtCore import Signal, QPoint, QCoreApplication
+from api import StackOverflowApi
+from background import BackgroundRunner
 
 
 class MyWidget(QtWidgets.QWidget):
@@ -18,17 +20,27 @@ class MyWidget(QtWidgets.QWidget):
         self.runner.start_running(self.msg_signal)
         self.msg_signal.connect(self.get_events)
         self.button = QtWidgets.QPushButton("Click me!")
+        self.prueba = QtWidgets.QPushButton("prueba")
         self.text = QtWidgets.QLabel("Hello World")
         self.layout = QtWidgets.QVBoxLayout()
         self.layout.addWidget(self.text)
         self.layout.addWidget(self.button)
+        self.layout.addWidget(self.prueba)
         self.setLayout(self.layout)
         self.button.clicked.connect(self.magic)
+        self.prueba.clicked.connect(self.foo)
+        self.api = StackOverflowApi()
+        self.background_runner = BackgroundRunner()
+        self.background_runner.msg_signal.connect(self.answers_loaded)
 
     @Slot(str)
     def get_events(self, event):
         callback = getattr(self, f'event_{event}_callback', self.unknown_event_callback)
         callback(event=event)
+
+    @Slot(str)
+    def answers_loaded(self, answers):
+        print(answers)
 
     def event_invoke_callback(self, **kwargs):
         if self.hidden:
@@ -48,6 +60,9 @@ class MyWidget(QtWidgets.QWidget):
 
     def magic(self):
         print("hehe")
+
+    def foo(self):
+        self.background_runner.start_jobs(self.api.get_answers, args=("java", ))
 
 
 if __name__ == "__main__":
