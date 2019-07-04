@@ -6,7 +6,7 @@ from PySide2.QtCore import Slot, QUrl, Qt
 from PySide2.QtWebEngineWidgets import QWebEngineView
 from keylogger import KeyloggerRunner
 from PySide2.QtCore import Signal, QPoint, QCoreApplication
-from api import StackOverflowApi
+from api import MockedApi as StackOverflowApi
 from background import BackgroundRunner
 
 
@@ -66,10 +66,10 @@ class AssistantWidget(QtWidgets.QWidget):
         self.progress.setVisible(False)
         buttons_layout = QtWidgets.QHBoxLayout()
         layout.addLayout(buttons_layout)
-        buttons_layout.addWidget(self.previous_button)
-        self.previous_button.setVisible(False)
         buttons_layout.addWidget(self.clear_button)
         self.clear_button.setVisible(False)
+        buttons_layout.addWidget(self.previous_button)
+        self.previous_button.setVisible(False)
         buttons_layout.addWidget(self.next_button)
         self.next_button.setVisible(False)
         self.webview.setVisible(False)
