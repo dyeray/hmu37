@@ -1,5 +1,6 @@
 from multiprocessing import Process, Queue
 from PySide2 import QtCore
+from PySide2.QtCore import QObject, Signal
 
 
 class Runner(QtCore.QObject):
@@ -8,13 +9,10 @@ class Runner(QtCore.QObject):
     main thread through a signal.
     """
 
-    def __init__(self, start_signal):
-        """
-        :param start_signal: the pyqtSignal that starts the job
-
-        """
+    def __init__(self, start_signal, msg_signal):
         super(Runner, self).__init__()
         self.job_input = None
+        self.msg_signal = msg_signal
         start_signal.connect(self._run)
 
     def _run(self):
@@ -24,14 +22,20 @@ class Runner(QtCore.QObject):
             p.start()
         while True:
             msg = queue.get()
-            print(msg)
+            self.msg_signal.emit(str(msg))
 
 
-class BackgroundRunner:
+class BackgroundRunner(QtCore.QObject):
+
+    msg_signal = Signal(str)
+
     def __init__(self):
+        super().__init__()
         self.runner_thread = QtCore.QThread()
-        self.runner = Runner(start_signal=self.runner_thread.started)
-        # runner.msg_from_job.connect(handle_msg)
+        self.runner = Runner(
+            start_signal=self.runner_thread.started,
+            msg_signal=self.msg_signal
+        )
         self.runner.moveToThread(self.runner_thread)
 
     def start_jobs(self, funcs, input=None):
