@@ -3,15 +3,18 @@ import sys
 from PySide2 import QtWidgets
 from PySide2.QtCore import Slot
 from keylogger import KeyloggerRunner
+from PySide2.QtCore import Signal
 
 
 class MyWidget(QtWidgets.QWidget):
 
+    msg_signal = Signal(str)
+
     def __init__(self):
         QtWidgets.QWidget.__init__(self)
         self.runner = KeyloggerRunner()
-        self.runner.start_running()
-        self.runner.msg_signal.connect(self.get_events)
+        self.runner.start_running(self.msg_signal)
+        self.msg_signal.connect(self.get_events)
         self.button = QtWidgets.QPushButton("Click me!")
         self.text = QtWidgets.QLabel("Hello World")
         self.layout = QtWidgets.QVBoxLayout()
