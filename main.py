@@ -20,6 +20,7 @@ class AssistantWidget(QtWidgets.QWidget):
 
     def __init__(self, parent=None):
         QtWidgets.QWidget.__init__(self, parent, Qt.FramelessWindowHint | Qt.WindowSystemMenuHint | Qt.WindowStaysOnTopHint)
+        self.setAttribute(Qt.WA_TranslucentBackground, True)
         self.runner = KeyloggerRunner()
         self.runner.start_running(self.msg_signal)
         self.msg_signal.connect(self.get_events)
