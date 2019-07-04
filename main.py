@@ -36,13 +36,23 @@ class AssistantWidget(QtWidgets.QWidget):
         self.answers_runner.msg_signal.connect(self.answers_loaded)
 
     def build_layout(self):
-        self.layout = QtWidgets.QVBoxLayout()
-        self.layout.addWidget(self.logo_label)
-        self.layout.addWidget(self.text)
-        self.layout.addWidget(self.button)
-        self.layout.addWidget(self.prueba)
-        self.layout.addWidget(self.webview)
-        self.setLayout(self.layout)
+        self.parent_layout = QtWidgets.QHBoxLayout()
+        self.parent_layout.addLayout(self.build_left_side())
+        self.parent_layout.addLayout(self.build_right_side())
+        self.setLayout(self.parent_layout)
+
+    def build_left_side(self):
+        layout = QtWidgets.QVBoxLayout()
+        layout.addWidget(self.logo_label)
+        return layout
+
+    def build_right_side(self):
+        layout = QtWidgets.QVBoxLayout()
+        layout.addWidget(self.text)
+        layout.addWidget(self.button)
+        layout.addWidget(self.prueba)
+        layout.addWidget(self.webview)
+        return layout
 
     @Slot(str)
     def get_events(self, event):
