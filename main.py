@@ -1,7 +1,7 @@
 import json
 import sys
 
-from PySide2 import QtWidgets
+from PySide2 import QtWidgets, QtGui
 from PySide2.QtCore import Slot, QUrl, Qt
 from PySide2.QtWebEngineWidgets import QWebEngineView
 from keylogger import KeyloggerRunner
@@ -24,6 +24,9 @@ class AssistantWidget(QtWidgets.QWidget):
         self.webview = QWebEngineView()
         self.button = QtWidgets.QPushButton("Click me!")
         self.prueba = QtWidgets.QPushButton("prueba")
+        self.logo = QtGui.QPixmap('stacko.png')
+        self.logo_label = QtWidgets.QLabel()
+        self.logo_label.setPixmap(self.logo)
         self.text = QtWidgets.QLabel("Hello World")
         self.build_layout()
         self.button.clicked.connect(self.magic)
@@ -34,6 +37,7 @@ class AssistantWidget(QtWidgets.QWidget):
 
     def build_layout(self):
         self.layout = QtWidgets.QVBoxLayout()
+        self.layout.addWidget(self.logo_label)
         self.layout.addWidget(self.text)
         self.layout.addWidget(self.button)
         self.layout.addWidget(self.prueba)
