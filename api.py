@@ -47,7 +47,8 @@ class StackOverflowApi:
 
 class MockedApi:
     @staticmethod
-    def get_answers():
+    def get_answers(text):
+        print(text)
         return json.dumps([
             {
                 'content': 'Don\'t use the fragments in that case',
@@ -55,6 +56,14 @@ class MockedApi:
             },
             {
                 'content': 'You have to add a frame layout first on xml layout',
+                'question_url': 'https://stackoverflow.com/questions/5658675/replacing-a-fragment-with-another-fragment-inside-activity-group',
+            },
+            {
+                'content': 'another answer',
+                'question_url': 'https://stackoverflow.com/questions/5658675/replacing-a-fragment-with-another-fragment-inside-activity-group',
+            },
+            {
+                'content': 'last answer',
                 'question_url': 'https://stackoverflow.com/questions/5658675/replacing-a-fragment-with-another-fragment-inside-activity-group',
             }
         ])
