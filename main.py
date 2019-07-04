@@ -1,25 +1,18 @@
 import sys
 
-import random
-
-from PySide2 import QtWidgets, QtCore
-from PySide2.QtCore import QObject, Signal, Slot
+from PySide2 import QtWidgets
+from PySide2.QtCore import Slot
 from background import BackgroundRunner
 from keylogger import start_keylogger
 
 
 class MyWidget(QtWidgets.QWidget):
 
-    key_pressed_signal = Signal(str)
-
     def __init__(self):
         QtWidgets.QWidget.__init__(self)
         self.runner = BackgroundRunner()
-        self.runner.start_jobs([start_keylogger], self.key_pressed_signal)
+        self.runner.start_jobs([start_keylogger])
         self.runner.msg_signal.connect(self.get_events)
-        # Sample code
-        self.hello = ["Hallo Welt", "你好，世界", "Hei maailma",
-            "Hola Mundo", "Привет мир"]
         self.button = QtWidgets.QPushButton("Click me!")
         self.text = QtWidgets.QLabel("Hello World")
         self.layout = QtWidgets.QVBoxLayout()
@@ -30,10 +23,10 @@ class MyWidget(QtWidgets.QWidget):
 
     @Slot(str)
     def get_events(self, event):
-        print(event)
+        self.text.setText(event)
 
     def magic(self):
-        self.text.setText(random.choice(self.hello))
+        print("hehe")
 
 
 if __name__ == "__main__":

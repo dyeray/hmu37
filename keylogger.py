@@ -3,6 +3,7 @@ from multiprocessing import Queue
 
 
 def start_keylogger(queue: Queue):
+
     def on_press(key):
         queue.put(key)
 
