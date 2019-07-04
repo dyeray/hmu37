@@ -36,3 +36,8 @@ class BackgroundRunner(QtCore.QObject):
         self.runner.func = func
         self.runner.args = args
         self.runner_thread.start()
+
+    def stop_jobs(self):
+        if self.runner_thread.isRunning():
+            self.runner_thread.terminate()
+            self.runner_thread.wait(1000)

@@ -6,7 +6,7 @@ from PySide2.QtCore import Slot, QUrl, Qt
 from PySide2.QtWebEngineWidgets import QWebEngineView
 from keylogger import KeyloggerRunner
 from PySide2.QtCore import Signal, QPoint, QCoreApplication
-from api import StackOverflowApi
+from api import MockedApi
 from background import BackgroundRunner
 
 
@@ -28,7 +28,7 @@ class AssistantWidget(QtWidgets.QWidget):
         self.build_layout()
         self.button.clicked.connect(self.magic)
         self.prueba.clicked.connect(self.find_answers)
-        self.api = StackOverflowApi()
+        self.api = MockedApi()
         self.answers_runner = BackgroundRunner()
         self.answers_runner.msg_signal.connect(self.answers_loaded)
 
@@ -71,7 +71,8 @@ class AssistantWidget(QtWidgets.QWidget):
         print("hehe")
 
     def find_answers(self):
-        self.answers_runner.start_jobs(self.api.get_answers, args=("java",))
+        self.answers_runner.stop_jobs()
+        self.answers_runner.start_jobs(self.api.get_answers)
 
     def mousePressEvent(self, event):
         self.last_position = event.pos()

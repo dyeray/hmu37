@@ -44,3 +44,17 @@ class StackOverflowApi:
 
         answers_ids = [answer['answer_id'] for answer in get_answers_metadata()]
         return json.dumps([create_answer(answer) for answer in get_answer_bodies(answers_ids)])
+
+class MockedApi:
+    @staticmethod
+    def get_answers():
+        return json.dumps([
+            {
+                'content': 'Don\'t use the fragments in that case',
+                'question_url': 'https://stackoverflow.com/questions/5658675/replacing-a-fragment-with-another-fragment-inside-activity-group',
+            },
+            {
+                'content': 'You have to add a frame layout first on xml layout',
+                'question_url': 'https://stackoverflow.com/questions/5658675/replacing-a-fragment-with-another-fragment-inside-activity-group',
+            }
+        ])
