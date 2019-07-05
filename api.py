@@ -1,4 +1,5 @@
 import json
+from time import sleep
 from stackapi import StackAPI
 
 
@@ -45,17 +46,29 @@ class StackOverflowApi:
         answers_ids = [answer['answer_id'] for answer in get_answers_metadata()]
         return json.dumps([create_answer(answer) for answer in get_answer_bodies(answers_ids)])
 
+
 class MockedApi:
     @staticmethod
     def get_answers(text):
-        print(text)
+        sleep(2)
         return json.dumps([
             {
-                'content': 'Don\'t use the fragments in that case',
+                'content': '<p>You should be able to get some reasonable information in:</p><pre><code>$ cat /etc/resolv.conf</code></pre>',
                 'question_url': 'https://stackoverflow.com/questions/5658675/replacing-a-fragment-with-another-fragment-inside-activity-group',
             },
             {
-                'content': 'You have to add a frame layout first on xml layout',
+                'content': """
+                <p>Here's how I do it:</p>
+                
+                <pre><code>nmcli dev show | grep DNS
+                </code></pre>
+                
+                <p>This <a href="https://askubuntu.com/questions/617067/why-nm-tool-is-no-longer-available-in-ubuntu-15-04">worked previous</a> to the way above:</p>
+                
+                <pre><code>nm-tool | grep DNS
+                </code></pre>
+                
+                """,
                 'question_url': 'https://stackoverflow.com/questions/5658675/replacing-a-fragment-with-another-fragment-inside-activity-group',
             },
             {
